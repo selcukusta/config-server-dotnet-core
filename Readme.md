@@ -18,7 +18,13 @@ Enter in *Vault* container and then;
 ```bash
 docker exec -i -t vault sh
 export VAULT_ADDR='http://localhost:8200'
-vault auth myroot
+```
+To write sample config values to the Vault instance, run *ASP.NET Core 2.1 MVC ConfigWriter project*:
+```bash
+cd ConfigWriter
+dotnet restore
+dotnet build
+dotnet run
 ```
 
 Run *Spring Boot Config Server*:
@@ -27,7 +33,7 @@ cd Server
 mvn spring-boot:run
 ```
 
-Run *ASP.NET Core 2.1 MVC Project*:
+Run *ASP.NET Core 2.1 MVC Client Project*:
 ```bash
 cd Client
 dotnet restore
