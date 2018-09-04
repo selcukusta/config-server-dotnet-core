@@ -6,19 +6,23 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Client.Models;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 
 namespace Client.Controllers
 {
     public class HomeController : Controller
     {
-         private IOptions<ConfigServer> IConfigServerData { get; set; }
+        private IOptionsSnapshot<ConfigServer> IConfigServerData { get; set; }
+        private IConfigurationRoot Config { get; set; }
 
-         public HomeController(IOptions<ConfigServer> configServerData)
-         {
-             IConfigServerData = configServerData;
-         }
+        public HomeController(IOptionsSnapshot<ConfigServer> configServerData, IConfigurationRoot config)
+        {
+            IConfigServerData = configServerData;
+            Config = config;
+        }
         public IActionResult Index()
         {
+            
             var configData = IConfigServerData.Value;
             ViewData["Message"] = configData?.Message ?? "No Message!";
             ViewData["Version"] = configData?.Info?.Version ?? "No Version!";
@@ -42,6 +46,12 @@ namespace Client.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        public IActionResult Reload()
+        {
+            Config.Reload();
+            return RedirectToAction("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
